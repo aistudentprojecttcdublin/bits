@@ -6,32 +6,46 @@ Created on Sat Aug 18 18:31:35 2018
 @author: CP
 """
 
-# Begin by setting API Service Key
+# ------------------------------------------
+#           SECTION 1: DOES THIS
+# ------------------------------------------
+
+# Begin by importing Libraries
 import os 
-os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/Users/CP/Desktop/MachineLearning/Lazy/Google_Cloud_Access/MLproject1-696323ed5422.json"
-
-# Body of code for video capture
-import cv2
-from google.cloud import vision
-client = vision.ImageAnnotatorClient()
-
+import string
 import numpy as np
 import cv2
+import time
 
+# Body of code for video capture
+# Change to test git
+
+# Allow time for camera turning on
 cap = cv2.VideoCapture(0)
+time.sleep(1)
 
-while(True):
+photos_saved = 0
+num_photos = 0
+path = "/Users/CP/Desktop/MachineLearning/Lazy/ComputerVision Projects/Photos"
+
+while(photos_saved == 0):
     # Capture frame-by-frame
     ret, frame = cap.read()
-
-    # Our operations on the frame come here
-    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
-
-    # Display the resulting frame
-    cv2.imshow('frame',gray)
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+    
+    # Save Frame into Directory
+    cv2.imwrite(os.path.join(path , ("photo"+str(num_photos)+".jpg")), frame)
+    
+    # Increment Photo Counter
+    num_photos = num_photos + 1
+    
+    # Repeat 20 times
+    if num_photos >= 20:
+        photos_saved = 1
+    
+    time.sleep(0.5)
+    
 
 # When everything done, release the capture
 cap.release()
 cv2.destroyAllWindows()
+
